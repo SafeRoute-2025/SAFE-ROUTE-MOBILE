@@ -7,8 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function HomeScreen({ navigation }) {
   const handleLogout = () => {
-    // Aqui você pode limpar tokens, sessões ou navegar para login
-    navigation.replace('Login'); // ou navigation.navigate('Login') se preferir empilhar
+    navigation.replace('Login');
   };
 
   return (

@@ -28,6 +28,8 @@ export default function EventsScreen() {
   const [eventTypeOptions, setEventTypeOptions] = useState([]);
   const [eventTypeValue, setEventTypeValue] = useState(null);
   const [editEventId, setEditEventId] = useState(null);
+  const [filterDate, setFilterDate] = useState(null);
+  const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
 
   const [form, setForm] = useState({
     eventType: '',
@@ -191,11 +193,48 @@ export default function EventsScreen() {
     );
   };
 
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+
+        <TouchableOpacity
+          onPress={() => setShowFilterDatePicker(true)}
+          style={[styles.input, { justifyContent: 'center', marginBottom: 10, alignItems: 'center' }]}
+        >
+          <Text>
+            {filterDate ? new Date(filterDate).toLocaleDateString('pt-BR') : 'Filtrar por data'}
+          </Text>
+        </TouchableOpacity>
+
+        {showFilterDatePicker && (
+          <DateTimePicker
+            value={filterDate ? new Date(filterDate) : new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowFilterDatePicker(false);
+              if (selectedDate) {
+                setFilterDate(selectedDate.toISOString().split('T')[0]);
+              }
+            }}
+          />
+        )}
+
+        {filterDate && (
+          <TouchableOpacity onPress={() => setFilterDate(null)}>
+            <Text style={{ color: '#0B1E51', textAlign: 'center', fontWeight: 'bold', marginBottom: 10 }}>
+              Limpar filtro
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <FlatList
-          data={events}
+          data={events.filter(event => {
+            if (!filterDate) return true;
+            const eventDate = new Date(event.eventDate).toISOString().split('T')[0];
+            return eventDate === filterDate;
+          })}
           keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
           renderItem={renderItem}
           contentContainerStyle={styles.list}

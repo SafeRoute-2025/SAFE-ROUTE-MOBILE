@@ -188,7 +188,7 @@ export default function ResourcesScreen() {
           <>
             <FlatList
               data={resources}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item, index) => item?.id ? item.id.toString() : index.toString()}
               renderItem={renderItem}
               contentContainerStyle={styles.list}
             />

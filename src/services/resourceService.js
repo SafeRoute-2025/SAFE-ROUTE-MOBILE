@@ -1,7 +1,7 @@
 import api from './api';
 
 export async function getResourcesBySafePlace(safePlaceId) {
-  const res = await api.get(`/resources?safePlaceId=${safePlaceId}`);
+const res = await api.get(`/resources/by-safe-place/${safePlaceId}`);
   return res.data;
 }
 
